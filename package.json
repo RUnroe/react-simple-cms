@@ -1,0 +1,28 @@
+{
+  "name": "react-simple-cms",
+  "version": "1.0.0",
+  "description": "Simple React components allowing you to easily display and edit content.",
+  "main": "src/index.ts",
+  "files": ["src/**/*"],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm pack"
+  },
+  "keywords": [
+    "react",
+    "cms",
+    "simple",
+    "RUnroe"
+  ],
+  "author": "Ryan Unroe",
+  "license": "ISC",
+  "peerDependencies": {
+    "react": ">=15.0.1",
+    "react-dom": ">=15.0.1"
+  },
+  "devDependencies": {
+    "react": ">=15.0.1",
+    "react-dom": ">=15.0.1",
+    "typescript": "^5.4.5"
+  }
+}
