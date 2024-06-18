@@ -8,32 +8,32 @@ import { CmsContextType } from "../types/types";
 export interface CmsPageProps {
   className?: string,
   inEditMode?: boolean,
+  pageKey: string,
   children: ReactNode,
 }
 
 const GridLayout = styled.div`
   display: grid;
-  grid-template-columns: 1fr 500px;
+  grid-template-columns: 1fr min(500px, 30%);
   grid-template-rows: 4rem 1fr;
   grid-template-areas: "config-bar config-bar" "page-content config-panel";
   position: relative;
 `;
 
-export const CmsPage = ({className = "", inEditMode = false, children, ...rest}: CmsPageProps) => {
+export const CmsPage = ({className = "", inEditMode = false, pageKey, children, ...rest}: CmsPageProps) => {
   const [cmsData, setCmsData] = useState({
     siteData: {},
-    currentPage: {},
+    currentPageKey: "",
     selectedComponent: {
-      pageKey: null,
       cmsKey: null,
       data: null,
     },
     inEditMode: false,
   });
-  const updateDataField = (field: string, data: any) => {
+  const updateDataField = (field: string, data: Object | String | boolean) => {
     if(cmsData.hasOwnProperty(field)) {
-      let tempCmsData = Object.assign({}, cmsData);
-      tempCmsData[field as keyof CmsContextType] = data;
+      let tempCmsData: CmsContextType = Object.assign({}, cmsData);
+      tempCmsData[field as keyof CmsContextType || ""] = data;
       setCmsData(tempCmsData);
     }
   }
@@ -47,7 +47,7 @@ export const CmsPage = ({className = "", inEditMode = false, children, ...rest}:
             <section style={{gridArea: "page-content"}}>
               {children}
             </section>
-            <ConfigPanel selectedComponentData={cmsData.selectedComponent} />
+            <ConfigPanel />
           </GridLayout> 
           : children}
       </main> 

@@ -3,9 +3,8 @@ import { createContext } from "react";
 export const CmsContext = createContext({
   context: {
   siteData: {},
-  currentPage: {},
+  currentPageKey: "",
   selectedComponent: {
-    pageKey: null,
     cmsKey: null,
     data: null,
   },

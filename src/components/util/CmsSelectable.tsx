@@ -35,7 +35,6 @@ const CmsSelectable = ({isDisabled = false, inEditMode = false, isSelected = fal
       console.log(context, rest);
       
       setContextData("selectedComponent", {
-        pageKey: null,
         cmsKey: cmsKey,
         data: null,
       }) //TODO
