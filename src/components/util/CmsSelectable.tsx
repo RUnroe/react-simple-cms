@@ -1,18 +1,16 @@
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import styled from "styled-components";
+import { CmsContext } from "./context";
 
 interface Props {
   children: ReactNode,
   isDisabled?: boolean,
   inEditMode?: boolean,
   isSelected?: boolean,
+  cmsKey: string,
 }
 
-
-
-const CmsSelectable = ({isDisabled = false, inEditMode = false, isSelected = true, children, ...rest}: Props) => {
-
-  const Selectable = styled.div`
+const Selectable = styled.div`
     border: 2px dashed #37a0f044;
     transition: border-color 0.1s ease; 
     &.selected {
@@ -27,9 +25,20 @@ const CmsSelectable = ({isDisabled = false, inEditMode = false, isSelected = tru
     }
   `;
 
+const CmsSelectable = ({isDisabled = false, inEditMode = false, isSelected = false, cmsKey, children, ...rest}: Props) => {
+  const {context, setContextData} = useContext(CmsContext);
+
+  
+
   const handleClick = () => {
     if(!isDisabled) {
-      console.log("TODO: Set as selected")
+      console.log(context, rest);
+      
+      setContextData("selectedComponent", {
+        pageKey: null,
+        cmsKey: cmsKey,
+        data: null,
+      }) //TODO
     }
   }
 

@@ -3,6 +3,7 @@ import { CmsContext } from "./util/context";
 import ConfigPanel from "./config/ConfigPanel";
 import styled from "styled-components";
 import ConfigBar from "./config/ConfigBar";
+import { CmsContextType } from "../types/types";
 
 export interface CmsPageProps {
   className?: string,
@@ -24,13 +25,20 @@ export const CmsPage = ({className = "", inEditMode = false, children, ...rest}:
     currentPage: {},
     selectedComponent: {
       pageKey: null,
-      dataKey: null,
+      cmsKey: null,
       data: null,
     },
-    inEditMode
-  })
+    inEditMode: false,
+  });
+  const updateDataField = (field: string, data: any) => {
+    if(cmsData.hasOwnProperty(field)) {
+      let tempCmsData = Object.assign({}, cmsData);
+      tempCmsData[field as keyof CmsContextType] = data;
+      setCmsData(tempCmsData);
+    }
+  }
   return ( 
-    <CmsContext.Provider value={cmsData}>
+    <CmsContext.Provider value={{context: cmsData, setContextData: updateDataField}}>
       <main className={`cms-page ${className} ${inEditMode ? "edit-mode": ""}`} {...rest}>
         {inEditMode ? 
           <GridLayout>

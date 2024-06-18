@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import { CmsSelectedComponentType } from "../../types/types";
 
 interface Props {
-  selectedComponentData: object;
+  selectedComponentData: CmsSelectedComponentType;
 }
 
 const Panel = styled.aside`
@@ -17,12 +18,15 @@ const Panel = styled.aside`
 `;
 
 const ConfigPanel = ({selectedComponentData}: Props) => {
-
+  console.log(selectedComponentData)
 
   return ( 
     <Panel>
       <h3>Selected Component</h3>
-
+      {selectedComponentData && <>
+        <p>{selectedComponentData.cmsKey}</p>
+      
+      </>}
     </Panel>
    );
 }

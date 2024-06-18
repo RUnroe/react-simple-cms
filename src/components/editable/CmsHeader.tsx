@@ -19,14 +19,15 @@ export const CmsHeader = ({
   inputs,
   //EditableComponent
   className, 
+  cmsKey,
   ...rest
   
 }: CmsHeaderProps) => {
 
-  const cmsData = useContext(CmsContext);
+  const {context, setContextData} = useContext(CmsContext);
 
   return (
-    <CmsSelectable>
+    <CmsSelectable isDisabled={false} inEditMode={true} isSelected={context.selectedComponent?.cmsKey === cmsKey} cmsKey={cmsKey}>
       <ComponentWrapper 
         tag={inputs.type as unknown as keyof JSX.IntrinsicElements} 
         className={`cms-component header-cms-component ${className}`}
