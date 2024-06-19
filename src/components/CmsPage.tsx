@@ -27,6 +27,11 @@ export const CmsPage = ({className = "", inEditMode = false, pageKey, children, 
     setManyContextFields([
       {field: "inEditMode", data: true},
       {field: "currentPageKey", data: pageKey},
+      {field: "selectedComponent", data: {
+        cmsKey: null,
+        data: null,
+        type: "",
+      }},
     ])
   }, [pageKey, inEditMode]);
   return ( 

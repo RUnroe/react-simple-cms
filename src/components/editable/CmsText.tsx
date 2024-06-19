@@ -29,7 +29,7 @@ export const CmsText = ({
         className={`cms-component text-cms-component ${className}`}
         style={inputs?.style}
         {...rest}
-        dangerouslySetInnerHTML={{__html: context.siteData?.["pages"]?.[context.currentPageKey]?.[cmsKey]["text"]}}
+        dangerouslySetInnerHTML={{__html: context.siteData?.["pages"]?.[context.currentPageKey]?.[cmsKey]?.["text"]}}
       >
         {/* {context.siteData?.["pages"]?.[context.currentPageKey]?.[cmsKey]["text"]} */}
       </p>

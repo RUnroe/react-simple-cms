@@ -26,7 +26,6 @@ const SmallItalicSpan = styled.span`
 
 const ConfigPanel = () => {
   const {context, setContextData} = useContext(CmsContext);
-  console.log(context)
 
   return ( 
     <Panel>
