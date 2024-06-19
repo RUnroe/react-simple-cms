@@ -5,9 +5,6 @@ import { CmsContext } from "../util/context";
 import { toTitleCase } from "../util/shared";
 import InputFields from "../util/InputFields";
 
-interface Props {
-  selectedComponentData: CmsSelectedComponentType;
-}
 
 const Panel = styled.aside`
   background-color: #fafafa;
@@ -18,7 +15,8 @@ const Panel = styled.aside`
   z-index: 200;
   top: 4rem;
   bottom: 0;
-  width: 100%;
+  width: min(500px, 30%);
+  box-sizing: border-box;
 `;
 
 const SmallItalicSpan = styled.span`

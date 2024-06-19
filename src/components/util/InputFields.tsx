@@ -1,5 +1,8 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CmsContext } from "./context";
+import { useQuill } from 'react-quilljs';
+import 'quill/dist/quill.snow.css';
+import styled from "styled-components";
 
 const getInputFields = (inputType: string) => {
   switch(inputType) {
@@ -14,12 +17,27 @@ const getInputFields = (inputType: string) => {
         key: "type",
       }
     ];
+    case "text": return [
+      {
+        type: "textarea",
+        key: "text",
+      },
+    ];
   }
 }
 
 
 
-const renderInputField = (inputField: Object, component: Object, setValue: (field: string, newValue: any) => any) => {
+
+
+
+interface SingleInputFieldProps {
+  inputField: Object,
+  component: Object,
+  setValue: (field: string, newValue: any) => any
+}
+
+const SingleInputField = ({inputField, component, setValue}: SingleInputFieldProps) => {
   if(inputField?.["type"] === "select") {
     return (
       <select onChange={(event) => setValue(inputField["key"], event.target.value)}>
@@ -27,6 +45,44 @@ const renderInputField = (inputField: Object, component: Object, setValue: (fiel
           <option value={opt?.value || opt}>{opt?.label || opt}</option>
         ))}
       </select>
+    );
+  }
+  if(inputField?.["type"] === "textarea") {
+    const { quill, quillRef } = useQuill({modules: {
+      toolbar: [
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ align: [] }],
+    
+        [{ list: 'ordered'}, { list: 'bullet' }],
+        // [{ indent: '-1'}, { indent: '+1' }],
+    
+        // [{ size: ['small', false, 'large', 'huge'] }],
+        // [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        ['link'],
+        [{ color: [] }, { background: [] }],
+    
+        ['clean'],
+      ],
+      clipboard: {
+        matchVisual: false,
+      },
+    }});
+    useEffect(() => {
+      if (quill) {
+        //Default value
+        quill.clipboard.dangerouslyPasteHTML(component?.[inputField["key"]]);
+        //On Change
+        quill.on("text-change", (delta, oldDelta, source) => {
+          // console.log(quill.getText()); // Get text only
+          // console.log(quill.root.innerHTML); // Get innerHTML using quill
+          setValue(inputField["key"], quill.root.innerHTML)
+        });
+      }
+    }, [quill]);
+    return (
+      <div style={{minHeight: 300 }}>
+        <div ref={quillRef} />
+      </div>
     );
   }
   return (
@@ -38,12 +94,12 @@ const renderInputField = (inputField: Object, component: Object, setValue: (fiel
 
 
 
-interface Props {
+interface InputFieldsProps {
   type: string,
   component: Object,
 }
 
-const InputFields = ({type, component}: Props) => {
+const InputFields = ({type, component}: InputFieldsProps) => {
   const {context, setContextData} = useContext(CmsContext);
   const inputFields = getInputFields(type);
 
@@ -57,9 +113,12 @@ const InputFields = ({type, component}: Props) => {
 
   return (
     <div>
-      {inputFields.map(field => renderInputField(field, component, (field, newValue) => {
-        updateDataField(field, newValue);
-      }))}
+      { inputFields.map(field => 
+      <SingleInputField inputField={field} component={component} setValue={(field, newValue) => {
+          updateDataField(field, newValue);
+        }}
+      />
+    )} 
     </div>
   )
 }

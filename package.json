@@ -29,7 +29,10 @@
     "@types/react-dom": "^18.2.22",
     "react": ">=15.0.1",
     "react-dom": ">=15.0.1",
-    "typescript": "^5.4.5",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.11",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "react-quilljs": "^2.0.0"
   }
 }
