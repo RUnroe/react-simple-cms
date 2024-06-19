@@ -23,7 +23,7 @@ const GridLayout = styled.div`
 export const CmsPage = ({className = "", inEditMode = false, pageKey, children, ...rest}: CmsPageProps) => {
   const [cmsData, setCmsData] = useState({
     siteData: {},
-    currentPageKey: "",
+    currentPageKey: pageKey,
     selectedComponent: {
       cmsKey: null,
       data: null,

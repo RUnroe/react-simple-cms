@@ -1,4 +1,7 @@
+import { useContext } from "react";
 import styled from "styled-components";
+import { CmsContext } from "../util/context";
+import { toTitleCase } from "../util/shared";
 
 interface Props {
   selectedComponentData: object;
@@ -22,11 +25,11 @@ const Bar = styled.nav`
 `;
 
 const ConfigBar = () => {
-
+  const {context, setContextData} = useContext(CmsContext);
 
   return ( 
     <Bar>
-      <h2>Page Name</h2>
+      <h2>'{toTitleCase(context.currentPageKey)}' Page</h2>
       <div>
         <button>Save</button>
       </div>
