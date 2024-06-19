@@ -9,6 +9,7 @@ export interface CmsPageProps {
   className?: string,
   inEditMode?: boolean,
   pageKey: string,
+  siteData: Object,
   children: ReactNode,
 }
 
@@ -20,13 +21,14 @@ const GridLayout = styled.div`
   position: relative;
 `;
 
-export const CmsPage = ({className = "", inEditMode = false, pageKey, children, ...rest}: CmsPageProps) => {
+export const CmsPage = ({className = "", inEditMode = false, pageKey, siteData = {}, children, ...rest}: CmsPageProps) => {
   const [cmsData, setCmsData] = useState({
-    siteData: {},
+    siteData: siteData,
     currentPageKey: pageKey,
     selectedComponent: {
       cmsKey: null,
       data: null,
+      type: "",
     },
     inEditMode: false,
   });

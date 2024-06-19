@@ -6,15 +6,13 @@ export interface EditableComponent {
 export interface CmsContextType {
   siteData: Object,
   currentPageKey: string,
-  selectedComponent: {
-    cmsKey: string,
-    data: any,
-  },
+  selectedComponent: CmsSelectedComponentType,
   inEditMode: boolean
 }
 
 
 export interface CmsSelectedComponentType {
-  cmsKey: null,
-  data: null,
+  cmsKey: string,
+  data: any,
+  type: string,
 }

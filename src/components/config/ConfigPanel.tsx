@@ -3,6 +3,7 @@ import { CmsSelectedComponentType } from "../../types/types";
 import { useContext } from "react";
 import { CmsContext } from "../util/context";
 import { toTitleCase } from "../util/shared";
+import InputFields from "../util/InputFields";
 
 interface Props {
   selectedComponentData: CmsSelectedComponentType;
@@ -36,7 +37,8 @@ const ConfigPanel = () => {
         <h3>Selected Component</h3>
         <p>{toTitleCase(context.selectedComponent.cmsKey)} <SmallItalicSpan>({context.selectedComponent.cmsKey})</SmallItalicSpan></p>
         
-        {/* TODO: Add input controls */}
+        <InputFields type={context.selectedComponent.type} component={context.siteData?.["pages"]?.[context.currentPageKey]?.[context.selectedComponent.cmsKey]}/>
+
       </> : <h3>Select a component to edit...</h3>
       }
     </Panel>

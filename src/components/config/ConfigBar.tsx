@@ -24,15 +24,22 @@ const Bar = styled.nav`
   box-sizing: border-box;
 `;
 
+const Flex = styled.div`
+  display: flex;
+  gap: 1rem;
+`
+
 const ConfigBar = () => {
   const {context, setContextData} = useContext(CmsContext);
 
   return ( 
     <Bar>
-      <h2>'{toTitleCase(context.currentPageKey)}' Page</h2>
-      <div>
+      <h2>Editing '{toTitleCase(context.currentPageKey)}' Page</h2>
+      <Flex>
         <button>Save</button>
-      </div>
+        <button>Preview</button>
+				<button>Exit</button>
+      </Flex>
     </Bar>
    );
 }

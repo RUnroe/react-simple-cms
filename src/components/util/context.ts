@@ -7,6 +7,7 @@ export const CmsContext = createContext({
   selectedComponent: {
     cmsKey: null,
     data: null,
+    type: "",
   },
   inEditMode: false,
   }, 

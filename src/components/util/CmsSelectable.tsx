@@ -6,7 +6,7 @@ interface Props {
   children: ReactNode,
   isDisabled?: boolean,
   inEditMode?: boolean,
-  isSelected?: boolean,
+  type: string,
   cmsKey: string,
 }
 
@@ -25,9 +25,9 @@ const Selectable = styled.div`
     }
   `;
 
-const CmsSelectable = ({isDisabled = false, inEditMode = false, isSelected = false, cmsKey, children, ...rest}: Props) => {
+const CmsSelectable = ({isDisabled = false, inEditMode = false, cmsKey, children, type, ...rest}: Props) => {
   const {context, setContextData} = useContext(CmsContext);
-
+  const isSelected = context.selectedComponent?.cmsKey === cmsKey;
   
 
   const handleClick = () => {
@@ -37,6 +37,7 @@ const CmsSelectable = ({isDisabled = false, inEditMode = false, isSelected = fal
       setContextData("selectedComponent", {
         cmsKey: cmsKey,
         data: null,
+        type
       }) //TODO
     }
   }
