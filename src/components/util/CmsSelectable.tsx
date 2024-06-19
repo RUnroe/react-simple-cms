@@ -43,12 +43,14 @@ const CmsSelectable = ({isDisabled = false, inEditMode = false, cmsKey, children
   }
 
   return ( 
+    context.inEditMode ? 
     <Selectable 
       className={`cms-selectable ${isDisabled ? "disabled" : ""} ${isSelected ? "selected" : ""}`} 
       onClick={handleClick}
     >
       {children}
-    </Selectable> 
+    </Selectable>
+    : children 
     );
 }
  

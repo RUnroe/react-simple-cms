@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { CmsContext } from "./util/context";
 import ConfigPanel from "./config/ConfigPanel";
 import styled from "styled-components";
@@ -9,7 +9,6 @@ export interface CmsPageProps {
   className?: string,
   inEditMode?: boolean,
   pageKey: string,
-  siteData: Object,
   children: ReactNode,
 }
 
@@ -21,26 +20,16 @@ const GridLayout = styled.div`
   position: relative;
 `;
 
-export const CmsPage = ({className = "", inEditMode = false, pageKey, siteData = {}, children, ...rest}: CmsPageProps) => {
-  const [cmsData, setCmsData] = useState({
-    siteData: siteData,
-    currentPageKey: pageKey,
-    selectedComponent: {
-      cmsKey: null,
-      data: null,
-      type: "",
-    },
-    inEditMode: false,
-  });
-  const updateDataField = (field: string, data: Object | String | boolean) => {
-    if(cmsData.hasOwnProperty(field)) {
-      let tempCmsData: CmsContextType = Object.assign({}, cmsData);
-      tempCmsData[field as keyof CmsContextType || ""] = data;
-      setCmsData(tempCmsData);
-    }
-  }
+export const CmsPage = ({className = "", inEditMode = false, pageKey, children, ...rest}: CmsPageProps) => {
+  const {context, setManyContextFields} = useContext(CmsContext);
+
+  useEffect(() => {
+    setManyContextFields([
+      {field: "inEditMode", data: true},
+      {field: "currentPageKey", data: pageKey},
+    ])
+  }, [pageKey, inEditMode]);
   return ( 
-    <CmsContext.Provider value={{context: cmsData, setContextData: updateDataField}}>
       <main className={`cms-page ${className} ${inEditMode ? "edit-mode": ""}`} {...rest}>
         {inEditMode ? 
           <GridLayout>
@@ -53,7 +42,6 @@ export const CmsPage = ({className = "", inEditMode = false, pageKey, siteData =
           </GridLayout> 
           : children}
       </main> 
-    </CmsContext.Provider>
   );
 }
  

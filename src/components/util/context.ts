@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { updateFieldType } from "../../types/types";
 
 export const CmsContext = createContext({
   context: {
@@ -11,5 +12,6 @@ export const CmsContext = createContext({
   },
   inEditMode: false,
   }, 
-  setContextData: (field: string, data: any) => {}
+  setContextData: (field: string, data: any) => {},
+  setManyContextFields: (dataFields: updateFieldType[]) => {}
 });

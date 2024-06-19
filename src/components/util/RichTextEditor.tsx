@@ -5,20 +5,28 @@ import 'quill/dist/quill.snow.css';
 const RichTextEditor = ({inputField, component, setValueCallback}) => {
 
   // https://www.npmjs.com/package/react-quilljs
-  const { quill, quillRef } = useQuill({modules: {
-    toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ align: [] }],
-      [{ list: 'ordered'}, { list: 'bullet' }],
-      ['link'],
-      [{ color: [] }, { background: [] }],
-  
-      ['clean'],
-    ],
-    clipboard: {
-      matchVisual: false,
+  const { quill, quillRef } = useQuill({
+    modules: {
+      toolbar: [
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ align: [] }],
+        [{ list: 'ordered'}, { list: 'bullet' }],
+        ['link'],
+        [{ color: [] }, { background: [] }],
+    
+        ['clean'],
+      ],
+      clipboard: {
+        matchVisual: false,
+      },
     },
-  }});
+    formats: [
+      'bold', 'italic', 'underline', 'strike',
+      'align', 'list', 
+      'link', 
+      'color', 'background',
+    ]
+  });
   useEffect(() => {
     if (quill) {
       //Default value

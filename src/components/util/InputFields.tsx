@@ -55,22 +55,28 @@ const SingleInputField = ({inputField, component, setValue}: SingleInputFieldPro
   useEffect(() => {
     if(inputField?.["type"] === "select") {
       setJsxInput(
-        <Select onChange={(event) => setValue(inputField["key"], event.target.value)} id={`cms-input-${inputField["key"]}`}>
+        <Select 
+          onChange={(event) => setValue(inputField["key"], event.target.value)} 
+          id={`cms-input-${inputField["key"]}`} 
+          key={`cms-input-${inputField["key"]}`} 
+          value={component?.[inputField["key"]]}
+        >
           {inputField?.["options"]?.map(opt => (
-            <option value={opt?.value || opt} selected={(opt?.value || opt) === component?.[inputField["key"]]}>{opt?.label || opt}</option>
+            <option value={opt?.value || opt} key={`cms-input-${inputField["key"]}-option=${opt?.label || opt}`} >{opt?.label || opt}</option>
           ))}
         </Select>
       );
     }
     else if(inputField?.["type"] === "textarea") {
       setJsxInput(
-        <RichTextEditor component={component} inputField={inputField} setValueCallback={setValue} />
+        <RichTextEditor component={component} inputField={inputField} setValueCallback={setValue} key={`cms-input-${inputField["key"]}`} />
       );
     }
     else {
       setJsxInput(
         <Input 
           id={`cms-input-${inputField["key"]}`}
+          key={`cms-input-${inputField["key"]}`} 
           type={inputField?.["type"] || "text"} 
           value={component?.[inputField["key"]]} 
           onChange={(event) => setValue(inputField["key"], event.target.value)}
@@ -116,12 +122,16 @@ const InputFields = ({type, component}: InputFieldsProps) => {
 
   return (
     <div>
-      { inputFields.map(field => 
-      <SingleInputField inputField={field} component={component} setValue={(field, newValue) => {
-          updateDataField(field, newValue);
-        }}
-      />
-    )} 
+      { inputFields.map( field => 
+        <SingleInputField 
+          key={`cms-single-input-field-${field.key}`}
+          inputField={field} 
+          component={component} 
+          setValue={(field, newValue) => {
+            updateDataField(field, newValue);
+          }}
+        />
+      )} 
     </div>
   )
 }

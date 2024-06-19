@@ -16,3 +16,8 @@ export interface CmsSelectedComponentType {
   data: any,
   type: string,
 }
+
+export interface updateFieldType {
+  field: string, 
+  data: Object | String | boolean
+}
