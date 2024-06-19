@@ -1,20 +1,21 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CmsContext } from "./context";
-import { useQuill } from 'react-quilljs';
-import 'quill/dist/quill.snow.css';
 import styled from "styled-components";
+import RichTextEditor from "./RichTextEditor";
 
 const getInputFields = (inputType: string) => {
   switch(inputType) {
     case "header": return [
       {
-        type: "text",
-        key: "text",
-      },
-      {
         type: "select",
         options: ["h1", "h2", "h3", "h4", "h5" ,"h6"],
         key: "type",
+        label: "Header Type"
+      },
+      {
+        type: "text",
+        key: "text",
+        label: "Text",
       }
     ];
     case "text": return [
@@ -29,6 +30,18 @@ const getInputFields = (inputType: string) => {
 
 
 
+const Input = styled.input`
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.25rem;
+  margin-bottom: 1rem;
+`;
+const Select = styled.select`
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.25rem;
+  margin-bottom: 1rem;
+`;
 
 
 interface SingleInputFieldProps {
@@ -38,56 +51,46 @@ interface SingleInputFieldProps {
 }
 
 const SingleInputField = ({inputField, component, setValue}: SingleInputFieldProps) => {
-  if(inputField?.["type"] === "select") {
+  const [jsxInput, setJsxInput] = useState(null);
+  useEffect(() => {
+    if(inputField?.["type"] === "select") {
+      setJsxInput(
+        <Select onChange={(event) => setValue(inputField["key"], event.target.value)} id={`cms-input-${inputField["key"]}`}>
+          {inputField?.["options"]?.map(opt => (
+            <option value={opt?.value || opt} selected={(opt?.value || opt) === component?.[inputField["key"]]}>{opt?.label || opt}</option>
+          ))}
+        </Select>
+      );
+    }
+    else if(inputField?.["type"] === "textarea") {
+      setJsxInput(
+        <RichTextEditor component={component} inputField={inputField} setValueCallback={setValue} />
+      );
+    }
+    else {
+      setJsxInput(
+        <Input 
+          id={`cms-input-${inputField["key"]}`}
+          type={inputField?.["type"] || "text"} 
+          value={component?.[inputField["key"]]} 
+          onChange={(event) => setValue(inputField["key"], event.target.value)}
+          /> 
+      );
+    }
+  }, [inputField, component]);
+ 
+
+  //Return jsx
+  if(inputField?.["label"]) {
     return (
-      <select onChange={(event) => setValue(inputField["key"], event.target.value)}>
-        {inputField?.["options"]?.map(opt => (
-          <option value={opt?.value || opt}>{opt?.label || opt}</option>
-        ))}
-      </select>
-    );
-  }
-  if(inputField?.["type"] === "textarea") {
-    const { quill, quillRef } = useQuill({modules: {
-      toolbar: [
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ align: [] }],
-    
-        [{ list: 'ordered'}, { list: 'bullet' }],
-        // [{ indent: '-1'}, { indent: '+1' }],
-    
-        // [{ size: ['small', false, 'large', 'huge'] }],
-        // [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        ['link'],
-        [{ color: [] }, { background: [] }],
-    
-        ['clean'],
-      ],
-      clipboard: {
-        matchVisual: false,
-      },
-    }});
-    useEffect(() => {
-      if (quill) {
-        //Default value
-        quill.clipboard.dangerouslyPasteHTML(component?.[inputField["key"]]);
-        //On Change
-        quill.on("text-change", (delta, oldDelta, source) => {
-          // console.log(quill.getText()); // Get text only
-          // console.log(quill.root.innerHTML); // Get innerHTML using quill
-          setValue(inputField["key"], quill.root.innerHTML)
-        });
-      }
-    }, [quill]);
-    return (
-      <div style={{minHeight: 300 }}>
-        <div ref={quillRef} />
+      <div>
+        <label htmlFor={`cms-input-${inputField["key"]}`}>{inputField["label"]}</label>
+        {jsxInput}
       </div>
-    );
+    )
   }
-  return (
-    <input type={inputField?.["type"] || "text"} value={component?.[inputField["key"]]} onChange={(event) => setValue(inputField["key"], event.target.value)}/> 
-  )
+  return (<>{jsxInput}</>)
+  
   
 }
 

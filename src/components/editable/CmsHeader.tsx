@@ -6,8 +6,8 @@ import { CmsContext } from "../util/context";
 import CmsSelectable from "../util/CmsSelectable";
 
 export interface CmsHeaderProps extends EditableComponent {
-  inputs: {
-    type: HeaderType,
+  inputs?: {
+    type?: HeaderType,
     // text: string,
     style?: object,
   }
@@ -28,9 +28,9 @@ export const CmsHeader = ({
   return (
     <CmsSelectable isDisabled={false} inEditMode={true} cmsKey={cmsKey} type={"header"}>
       <ComponentWrapper 
-        tag={inputs.type as unknown as keyof JSX.IntrinsicElements} 
+        tag={(context.siteData?.["pages"]?.[context.currentPageKey]?.[cmsKey]["type"] || inputs?.type) as unknown as keyof JSX.IntrinsicElements} 
         className={`cms-component header-cms-component ${className}`}
-        style={inputs.style}
+        style={inputs?.style}
         {...rest}
       >
         {context.siteData?.["pages"]?.[context.currentPageKey]?.[cmsKey]["text"]}

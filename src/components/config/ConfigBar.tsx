@@ -37,7 +37,7 @@ const ConfigBar = () => {
       <h2>Editing '{toTitleCase(context.currentPageKey)}' Page</h2>
       <Flex>
         <button>Save</button>
-        <button>Preview</button>
+        {/* <button>Preview</button> */}
 				<button>Exit</button>
       </Flex>
     </Bar>
