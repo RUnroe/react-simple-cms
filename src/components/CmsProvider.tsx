@@ -5,9 +5,10 @@ import { CmsContext } from "./util/context";
 interface Props {
   siteData: Object,
   children: ReactNode,
+  fileUploadCallback?: (files: FileList) => void,
 }
 
-export const CmsProvider = ({siteData, children}: Props) => {
+export const CmsProvider = ({siteData, children, fileUploadCallback = (files: FileList) => {window.alert("Developer has not set up a way to upload files. Please contact your developer for further support.")}}: Props) => {
   const [cmsData, setCmsData] = useState({
     siteData: siteData,
     currentPageKey: "",
@@ -37,7 +38,7 @@ export const CmsProvider = ({siteData, children}: Props) => {
     setCmsData(tempCmsData);
   }
   return ( 
-    <CmsContext.Provider value={{context: cmsData, setContextData: updateDataField, setManyContextFields: updateManyDataFields}}>  
+    <CmsContext.Provider value={{context: cmsData, setContextData: updateDataField, setManyContextFields: updateManyDataFields, fileUploadCallback: fileUploadCallback}}>  
       {children}
     </CmsContext.Provider> 
   );

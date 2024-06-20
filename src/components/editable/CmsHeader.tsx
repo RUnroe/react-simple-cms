@@ -18,7 +18,7 @@ export const CmsHeader = ({
   //This components input fields
   inputs,
   //EditableComponent
-  className, 
+  className = "", 
   cmsKey,
   ...rest
   

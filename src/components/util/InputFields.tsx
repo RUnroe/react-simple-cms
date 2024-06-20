@@ -24,6 +24,18 @@ const getInputFields = (inputType: string) => {
         key: "text",
       },
     ];
+    case "image": return [
+      {
+        type: "text",
+        key: "src",
+        label: "External Image",
+      },
+      {
+        type: "file",
+        key: "upload-src",
+        label: "Upload Image",
+      }
+    ]
   }
 }
 
@@ -47,10 +59,11 @@ const Select = styled.select`
 interface SingleInputFieldProps {
   inputField: Object,
   component: Object,
+  fileUploadCallback: (files: FileList) => void,
   setValue: (field: string, newValue: any) => any
 }
 
-const SingleInputField = ({inputField, component, setValue}: SingleInputFieldProps) => {
+const SingleInputField = ({inputField, component, fileUploadCallback, setValue}: SingleInputFieldProps) => {
   const [jsxInput, setJsxInput] = useState(null);
   useEffect(() => {
     if(inputField?.["type"] === "select") {
@@ -79,7 +92,15 @@ const SingleInputField = ({inputField, component, setValue}: SingleInputFieldPro
           key={`cms-input-${inputField["key"]}`} 
           type={inputField?.["type"] || "text"} 
           value={component?.[inputField["key"]]} 
-          onChange={(event) => setValue(inputField["key"], event.target.value)}
+          onChange={(event) => {
+            if(inputField["key"].includes("upload-")) {
+              //TODO: This might need some more work
+              fileUploadCallback(event.target.files);
+            }
+            else {
+              setValue(inputField["key"], event.target.value);
+            }
+          }}
           /> 
       );
     }
@@ -109,7 +130,7 @@ interface InputFieldsProps {
 }
 
 const InputFields = ({type, component}: InputFieldsProps) => {
-  const {context, setContextData} = useContext(CmsContext);
+  const {context, setContextData, fileUploadCallback} = useContext(CmsContext);
   const inputFields = getInputFields(type);
 
   const updateDataField = (field: string, value: any) => {
@@ -127,6 +148,7 @@ const InputFields = ({type, component}: InputFieldsProps) => {
           key={`cms-single-input-field-${field.key}`}
           inputField={field} 
           component={component} 
+          fileUploadCallback={fileUploadCallback}
           setValue={(field, newValue) => {
             updateDataField(field, newValue);
           }}

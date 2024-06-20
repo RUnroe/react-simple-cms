@@ -12,6 +12,7 @@ export const CmsContext = createContext({
   },
   inEditMode: false,
   }, 
+  fileUploadCallback: (files: FileList) => {},
   setContextData: (field: string, data: any) => {},
   setManyContextFields: (dataFields: updateFieldType[]) => {}
 });

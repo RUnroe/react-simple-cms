@@ -34,7 +34,7 @@ const ConfigPanel = () => {
         <h3>Selected Component</h3>
         <p>{toTitleCase(context.selectedComponent.cmsKey)} <SmallItalicSpan>({context.selectedComponent.cmsKey})</SmallItalicSpan></p>
         
-        <InputFields type={context.selectedComponent.type} component={context.siteData?.["pages"]?.[context.currentPageKey]?.[context.selectedComponent.cmsKey]}/>
+        <InputFields type={context.selectedComponent.type} component={context.siteData?.["pages"]?.[context.currentPageKey]?.[context.selectedComponent.cmsKey]} />
 
       </> : <h3>Select a component to edit...</h3>
       }

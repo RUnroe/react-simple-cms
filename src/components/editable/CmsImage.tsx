@@ -4,15 +4,13 @@ import { CmsContext } from "../util/context";
 import CmsSelectable from "../util/CmsSelectable";
 
 export interface CmsTextProps extends EditableComponentType {
-  inputs?: {
-    style?: object,
-  }
+  alt?: string,
 }
 
 
-export const CmsText = ({
+export const CmsImage = ({
   //This components input fields
-  inputs,
+  alt,
   //EditableComponent
   className = "", 
   cmsKey,
@@ -22,15 +20,13 @@ export const CmsText = ({
 
   const {context, setContextData} = useContext(CmsContext);
   return (
-    <CmsSelectable isDisabled={false} inEditMode={true} cmsKey={cmsKey} type={"text"}>
-      <p 
-        className={`cms-component text-cms-component ${className}`}
-        style={inputs?.style}
+    <CmsSelectable isDisabled={false} inEditMode={true} cmsKey={cmsKey} type={"image"}>
+      <img 
+        className={`cms-component image-cms-component ${className}`}
+        src={context.siteData?.["pages"]?.[context.currentPageKey]?.[cmsKey]?.["src"]}
+        alt={alt || "image"}
         {...rest}
-        dangerouslySetInnerHTML={{__html: context.siteData?.["pages"]?.[context.currentPageKey]?.[cmsKey]?.["text"]}}
-      >
-        {/* {context.siteData?.["pages"]?.[context.currentPageKey]?.[cmsKey]["text"]} */}
-      </p>
+      />
     </CmsSelectable>
   )
 }
