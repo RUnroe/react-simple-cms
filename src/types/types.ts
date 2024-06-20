@@ -21,3 +21,8 @@ export interface updateFieldType {
   field: string, 
   data: Object | String | boolean
 }
+
+export interface CmsImageType {
+  src: string, 
+  alt: string
+}

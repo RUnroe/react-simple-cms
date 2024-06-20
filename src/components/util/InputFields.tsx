@@ -1,7 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { CmsContext } from "./context";
 import styled from "styled-components";
 import RichTextEditor from "./RichTextEditor";
+import { DragDropContext, Draggable, DraggableProvided, DraggableRubric, DraggableStateSnapshot, Droppable, DroppableProvided, DroppableStateSnapshot } from "@hello-pangea/dnd";
+import { CmsImageType } from "../../types/types";
+import ImageGalleryInputFields from "./ImageGalleryInputFields";
 
 const getInputFields = (inputType: string) => {
   switch(inputType) {
@@ -28,14 +31,41 @@ const getInputFields = (inputType: string) => {
       {
         type: "text",
         key: "src",
-        label: "External Image",
+        label: "From the Web",
       },
       {
         type: "file",
         key: "upload-src",
         label: "Upload Image",
-      }
-    ]
+      },
+      {
+        type: "text",
+        key: "alt",
+        label: "Description",
+      },
+    ];
+    case "image-gallery": return [
+      {
+        type: "text",
+        key: "src",
+        label: "From the Web",
+      },
+      {
+        type: "file",
+        key: "upload-src",
+        label: "Upload Image",
+      },
+      {
+        type: "submit",
+        key: "upload-src",
+        label: "Upload",
+      },
+      {
+        type: "text",
+        key: "alt",
+        label: "Description",
+      },
+    ];
   }
 }
 
@@ -91,7 +121,7 @@ const SingleInputField = ({inputField, component, fileUploadCallback, setValue}:
           id={`cms-input-${inputField["key"]}`}
           key={`cms-input-${inputField["key"]}`} 
           type={inputField?.["type"] || "text"} 
-          value={component?.[inputField["key"]]} 
+          value={component?.[inputField?.["key"]]} 
           onChange={(event) => {
             if(inputField["key"].includes("upload-")) {
               //TODO: This might need some more work
@@ -143,7 +173,7 @@ const InputFields = ({type, component}: InputFieldsProps) => {
 
   return (
     <div>
-      { inputFields.map( field => 
+      { type !== "image-gallery" && inputFields.map( field => 
         <SingleInputField 
           key={`cms-single-input-field-${field.key}`}
           inputField={field} 
@@ -154,6 +184,10 @@ const InputFields = ({type, component}: InputFieldsProps) => {
           }}
         />
       )} 
+      {
+        type === "image-gallery" && 
+        <ImageGalleryInputFields component={component} />
+      }
     </div>
   )
 }

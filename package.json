@@ -33,6 +33,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^16.6.0",
     "react-quilljs": "^2.0.0"
   }
 }

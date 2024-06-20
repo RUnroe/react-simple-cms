@@ -24,7 +24,7 @@ export const CmsImage = ({
       <img 
         className={`cms-component image-cms-component ${className}`}
         src={context.siteData?.["pages"]?.[context.currentPageKey]?.[cmsKey]?.["src"]}
-        alt={alt || "image"}
+        alt={context.siteData?.["pages"]?.[context.currentPageKey]?.[cmsKey]?.["alt"] || alt || "image"}
         {...rest}
       />
     </CmsSelectable>
