@@ -1,4 +1,4 @@
-export interface EditableComponent {
+export interface EditableComponentType {
   cmsKey: string,
   className?: string,
 }

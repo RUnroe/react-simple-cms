@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { HeaderType } from "../../types/enums";
-import { EditableComponent } from "../../types/types";
+import { EditableComponentType } from "../../types/types";
 import ComponentWrapper from "../util/ComponentWrapper";
 import { CmsContext } from "../util/context";
 import CmsSelectable from "../util/CmsSelectable";
 
-export interface CmsTextProps extends EditableComponent {
+export interface CmsTextProps extends EditableComponentType {
   inputs?: {
     style?: object,
   }
