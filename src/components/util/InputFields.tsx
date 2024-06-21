@@ -186,7 +186,7 @@ const InputFields = ({type, component}: InputFieldsProps) => {
       )} 
       {
         type === "image-gallery" && 
-        <ImageGalleryInputFields component={component} />
+        <ImageGalleryInputFields component={component} updateSiteData={updateDataField}/>
       }
     </div>
   )
