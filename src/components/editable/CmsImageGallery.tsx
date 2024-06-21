@@ -26,6 +26,7 @@ export const CmsImageGallery = ({
         <img 
         className={`image-cms-component ${className} image-${index}`}
         src={src}
+        key={`image-gallery-${cmsKey}-${src}-${index}`}
         alt={alt || "image"}
         {...rest}
       />

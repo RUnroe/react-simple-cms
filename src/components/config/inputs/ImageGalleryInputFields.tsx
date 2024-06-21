@@ -1,9 +1,10 @@
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { CmsImageType } from "../../../types/types";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { CmsContext } from "../../util/context";
 import styled from "styled-components";
-import { DragIcon } from "../../util/icons";
+import { DragIcon, EditIcon } from "../../util/icons";
+import { ImageSelectModal } from "./ImageModal";
 
 
 const DroppableContainer = styled.div`
@@ -24,13 +25,43 @@ const DraggableItem = styled.div`
   background-color: #fafafa;
   cursor: grab;
   display: grid;
-  grid-template-columns: 2rem auto;
+  grid-template-columns: 2rem auto 2rem;
   align-items: center;
+
+  p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
   svg {
     fill: #999;
+
+    &.edit-icon {
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: fill 0.1s ease;
+      &:hover {
+        fill: #37a0f0;
+      }
+    }
   }
 `;
 
+
+const AddItemButton = styled.button`
+  width: 80%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  background-color: #fafafa;
+  cursor: pointer;
+  align-items: center;
+
+  position: absolute;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  left: 50%;
+`;
 
 interface Props {
   component: Object,
@@ -38,7 +69,7 @@ interface Props {
 }
 
 const ImageGalleryInputFields = ({ component, updateSiteData }: Props) => {
-  
+  const [imageSetter, setImageSetter] = useState();
   
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -53,17 +84,18 @@ const ImageGalleryInputFields = ({ component, updateSiteData }: Props) => {
   }, []);
 
   return (
+    <>
     <DragDropContext
       onDragEnd={onDragEnd}
     >
-      <Droppable droppableId={"image-gallery"}>
+      <Droppable droppableId={`image-gallery-${component?.["cmsKey"]}}`}>
         {(provided, snapshot) => (
           <DroppableContainer
             {...provided.droppableProps}
             ref={provided.innerRef}
           >
             {component["list"]?.map(({ src, alt }: CmsImageType, index) => (
-              <Draggable draggableId={`draggable-index-${index}`} index={index}>
+              <Draggable draggableId={`draggable-index-${index}`} index={index} key={`${component?.["cmsKey"]}-draggable-index-${index}`}>
                 {(provided, snapshot) => (
                   <DraggableItem
                     ref={provided.innerRef}
@@ -72,14 +104,20 @@ const ImageGalleryInputFields = ({ component, updateSiteData }: Props) => {
                   >
                     <DragIcon />
                     <p>{alt}</p>
+                    <EditIcon />
                   </DraggableItem>
                 )}
               </Draggable>
             ))}
-            </DroppableContainer>
+            {provided.placeholder}
+          </DroppableContainer>
         )}
       </Droppable>
+      
     </DragDropContext>
+    <AddItemButton>Add Image</AddItemButton>
+    <ImageSelectModal setSetter={setImageSetter} setter={imageSetter}/>
+  </>
   );
 };
 
