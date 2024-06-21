@@ -1,9 +1,9 @@
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import { CmsImageType } from "../../types/types";
+import { CmsImageType } from "../../../types/types";
 import { useCallback, useContext } from "react";
-import { CmsContext } from "./context";
+import { CmsContext } from "../../util/context";
 import styled from "styled-components";
-import { DragIcon } from "./icons";
+import { DragIcon } from "../../util/icons";
 
 
 const DroppableContainer = styled.div`

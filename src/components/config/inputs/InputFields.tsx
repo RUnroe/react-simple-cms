@@ -1,9 +1,9 @@
 import { ReactNode, useContext, useEffect, useState } from "react";
-import { CmsContext } from "./context";
+import { CmsContext } from "../../util/context";
 import styled from "styled-components";
 import RichTextEditor from "./RichTextEditor";
 import { DragDropContext, Draggable, DraggableProvided, DraggableRubric, DraggableStateSnapshot, Droppable, DroppableProvided, DroppableStateSnapshot } from "@hello-pangea/dnd";
-import { CmsImageType } from "../../types/types";
+import { CmsImageType } from "../../../types/types";
 import ImageGalleryInputFields from "./ImageGalleryInputFields";
 
 const getInputFields = (inputType: string) => {

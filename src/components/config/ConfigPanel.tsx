@@ -3,7 +3,7 @@ import { CmsSelectedComponentType } from "../../types/types";
 import { useContext } from "react";
 import { CmsContext } from "../util/context";
 import { toTitleCase } from "../util/shared";
-import InputFields from "../util/InputFields";
+import InputFields from "./inputs/InputFields";
 
 
 const Panel = styled.aside`
