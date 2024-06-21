@@ -69,7 +69,7 @@ interface Props {
 }
 
 const ImageGalleryInputFields = ({ component, updateSiteData }: Props) => {
-  const [imageSetter, setImageSetter] = useState();
+  const [showImageModal, setShowImageModal] = useState(null);
   
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -104,7 +104,7 @@ const ImageGalleryInputFields = ({ component, updateSiteData }: Props) => {
                   >
                     <DragIcon />
                     <p>{alt}</p>
-                    <EditIcon />
+                    <EditIcon onClick={() => setShowImageModal(src)} />
                   </DraggableItem>
                 )}
               </Draggable>
@@ -115,8 +115,17 @@ const ImageGalleryInputFields = ({ component, updateSiteData }: Props) => {
       </Droppable>
       
     </DragDropContext>
-    <AddItemButton>Add Image</AddItemButton>
-    <ImageSelectModal setSetter={setImageSetter} setter={imageSetter}/>
+    <AddItemButton onClick={() => setShowImageModal(-1)}>Add Image</AddItemButton>
+    {!!showImageModal && 
+      <ImageSelectModal 
+        handleAdd={(image) => {
+          console.log(image);
+        }}  
+        handleClose={() => {
+          setShowImageModal(null);
+        }}
+        />
+    }
   </>
   );
 };

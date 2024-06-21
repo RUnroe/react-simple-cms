@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { CmsImageType } from "../../../types/types";
 
 
 
@@ -27,17 +28,126 @@ const Modal = styled.div`
   background-color: #fafafa;
   padding:1rem;
   box-sizing: border-box;
+
+  .modal-header {
+    display:flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 1rem 1rem 0;
+
+    button {
+      &:hover {
+        color: #F26666;
+      }
+    }
+    h2 {
+      margin:0.5rem 0;
+    }
+  }
+  .modal-header button, .cancel-btn {
+    background-color: transparent;
+    border:none;
+    outline:none;
+    font-weight: bold;
+    cursor:pointer;
+    transition: color 0.1s ease;
+    display:flex;
+    font-size: 1.6rem;
+}
+
+.file-input {
+  display:block;
+  margin:0.5rem;
+}
+.file-input > input {
+  display:none;
+}
+
+.btn-group {
+  border-top: 1px solid #ccc;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 3rem;
+}
+.image-options {
+  padding: 0 1rem;
+  display:flex;
+
+  .image-option {
+    padding: 0.5rem 1rem;
+    cursor:pointer;
+  }
+}
+
+.image-options input:checked + .image-option {
+  color: #37a0f0;
+  border-bottom: 2px solid #37a0f0;
+}
+.image-options-container {
+  border-bottom: 1px solid #ccc;
+}
+input[type="radio"], input[type="checkbox"] {
+  display:none;
+}
+.upload-container {
+  padding: 1rem;
+  height:300px;
+  overflow-x: hidden;
+}
+.upload-container.hidden {
+  display:none;
+}
+.image-upload-container {
+  text-align: center;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.image-upload-container p {
+  margin:0.5rem 0 0;
+}
+.image-upload-container .input-label.file-input.btn {
+  margin:0.25rem auto;
+}
+.image-select-container {
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.image-select-option {
+  width:125px;
+  height:125px;
+  overflow:hidden;
+  margin:0.5rem;
+  border:2px solid #ccc;
+  cursor:pointer;
+}
+.image-select-option.selected {
+  border: 2px solid #37a0f0;
+}
+.image-select-option > img {
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  object-position: center center;
+}
 `;
 
+interface Props {
+  handleAdd: (image: any) => void,
+  handleClose: () => void,
+}
 
-export const ImageSelectModal = ({ setter, setSetter }) => {
+
+export const ImageSelectModal = ({ handleAdd, handleClose }:Props) => {
   const [image, setImage] = useState();
-  const [selectedImageUrl, setSelectedImageUrl] = useState();
+  const [selectedImageUrl, setSelectedImageUrl] = useState("");
   const [modalState, setModalState] = useState("upload");
   const [userImages, setUserImages] = useState([]);
-  const [userImageJSX, setUserImageJSX] = useState([]);
-  const [refresh, setRefresh] = useState(true);
 
+  //TODO: Move this to webservice.ts
   const getUsersImages = async () => {
     return fetch("/api/icons/user")
       .then((result) => result.json())
@@ -47,35 +157,10 @@ export const ImageSelectModal = ({ setter, setSetter }) => {
         return images;
       });
   };
-  const renderUserImagesJSX = (data, selectedId) => {
-    let jsxElements = [];
-    data.forEach((value, index) => {
-      jsxElements.push(
-        <div
-          className={`image-select-option ${
-            index === selectedId ? "selected" : ""
-          }`}
-          data-id={index}
-          onClick={() => selectImageOption(index, value)}
-        >
-          <img alt={index} src={value} />
-        </div>
-      );
-    });
-    setUserImageJSX(jsxElements);
-  };
-  useEffect(() => {
-    if (refresh) {
-      setImage(null);
-      getUsersImages();
-      setRefresh(false);
-    }
-  }, [refresh]);
 
-  useEffect(() => {
-    renderUserImagesJSX(userImages, -1);
-  }, [userImages]);
 
+
+  //TODO: Move this to webservice.ts
   const postIcon = () => {
     //TODO: catch and display error
     const formData = new FormData();
@@ -85,36 +170,28 @@ export const ImageSelectModal = ({ setter, setSetter }) => {
       body: formData,
     }).then((response) => response.json());
   };
-  const selectImageOption = (dataId, url) => {
-    renderUserImagesJSX(userImages, dataId);
-    setSelectedImageUrl(url);
-  };
+
   const selectImage = async () => {
     if (modalState === "upload") {
       postIcon().then((img) => {
         setSelectedImageUrl(img.url);
-        setter(img.url);
-        setRefresh(true);
-        setSetter(""); // clear the setter to hide the modal
+        handleAdd(img.url);
+        handleClose();
       });
     } else if (modalState === "select") {
-      setter(selectedImageUrl);
-      setRefresh(true);
-      setSetter(""); // clear the setter to hide the modal
+      handleAdd(selectedImageUrl);
+      handleClose();
     }
   };
-  const closeModal = () => {
-    setRefresh(true);
-    setSetter(""); // clear the setter to hide the modal
-  };
-  if (setter || true) {
+
+  if (handleAdd) {
     return (
       <>
         <Modal className="visible">
           <div className="modal-header">
             <h2>Select Image</h2>
-            <button onClick={closeModal}>
-              <i className="fas fa-times"></i>
+            <button onClick={handleClose}>
+            &#xD7;
             </button>
           </div>
           <div className="modal-body">
@@ -161,9 +238,9 @@ export const ImageSelectModal = ({ setter, setSetter }) => {
                     />
                   </label>
                   <p>{image ? image?.["name"] : ""}</p>
-                  <span id="imageErrorMsg" className="error-message hidden">
+                  {/* <span id="imageErrorMsg" className="error-message hidden">
                     Incorrect file type
-                  </span>
+                  </span> */}
                 </div>
               </div>
               <div
@@ -171,11 +248,23 @@ export const ImageSelectModal = ({ setter, setSetter }) => {
                   modalState === "select" ? "" : "hidden"
                 }`}
               >
-                {userImageJSX}
+                {
+                  userImages?.map(({src, alt}: CmsImageType, index) => (
+                      <div
+                        className={`image-select-option ${
+                          src === selectedImageUrl ? "selected" : ""
+                        }`}
+                        data-id={index}
+                        onClick={() => setSelectedImageUrl(src)}
+                      >
+                        <img alt={alt} src={src} />
+                      </div>
+                  ))
+                }
               </div>
             </div>
             <div className="btn-group">
-              <button className="btn blue-outline" onClick={closeModal}>
+              <button className="btn blue-outline" onClick={handleClose}>
                 Cancel
               </button>
               <button className="btn blue" onClick={selectImage}>
@@ -184,9 +273,7 @@ export const ImageSelectModal = ({ setter, setSetter }) => {
             </div>
           </div>
         </Modal>
-        <Screen
-          onClick={closeModal}
-        ></Screen>
+        <Screen></Screen>
       </>
     );
   }
